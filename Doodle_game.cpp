@@ -5,6 +5,7 @@
 #include <cmath>
 #include <sstream>
 #include <windows.h>
+#include <fstream>
 
 
 #include "Header.h"
@@ -26,7 +27,7 @@ int main()
 	float time_game = 0;
 	
 	RenderWindow app(VideoMode(450, 533), "Doodle Game!"/*, Style::Fullscreen */);
-	app.setFramerateLimit(60);
+	
 
 	Texture t1, t2, t3, t4;
 	t1.loadFromFile("images/background2 (2).jpg");
@@ -50,7 +51,7 @@ int main()
 	
 	//текст время:
 		Font font;
-		font.loadFromFile("arial.ttf");
+		font.loadFromFile("images/sunflower.otf");
 		Text text;
 		text.setFont(font);
 		text.setCharacterSize(20);
@@ -58,7 +59,7 @@ int main()
 		text.setPosition(20, 10);
 		
 
-	sleaf.setRotation(sleaf.getRotation() - 60);
+	sleaf.setRotation(sleaf.getRotation() + 320);
 	sleaf.setPosition(5, 40);
 
 	//фон паузы
@@ -69,7 +70,8 @@ int main()
 		t5.loadFromImage(image);
 		t5.setSmooth(true);
 		Sprite SPause(t5);
-		SPause.setPosition(200, 200);
+		SPause.setPosition(190, 190);
+		SPause.setRotation(45);
 	int pause = 0, pause2=0;
 
 	//пауза
@@ -77,8 +79,8 @@ int main()
 	text1.setFont(font);
 	text1.setCharacterSize(20);
 	text1.setFillColor(Color::White);
-	text1.setPosition(380, 10);
-	text1.setString("Pause");
+	text1.setPosition(20, 30);
+	text1.setString("to pause - TAB");
 
 	while (app.isOpen())
 	{
@@ -90,31 +92,20 @@ int main()
 		{
 			if (e.type == Event::Closed)
 				app.close();
-			//if (e.type == Event::MouseButtonPressed)//если нажали клавишу мыши
-			//	if (e.key.code == Mouse::Left)//а именно левую
-			//			pause = true;
 			if (e.type == Event::KeyPressed)
 				if (e.key.code == Keyboard::Space)
 				{
-					pause = 1;
-					pause2 == 0;
-					Sleep(10);
+					if (pause==0) pause = 1;
+					else pause = 0;
 				}
 		}
-		if (pause==1 && pause2==0) {
+		if (pause==1 ) {
 			app.draw(SPause);
+			app.setFramerateLimit(0);
 			app.display();
-			/*if (e.type == Event::MouseButtonPressed)
-				if (e.key.code == Mouse::Left)
-					pause = false;*/
-			if (e.type == Event::KeyPressed)
-				if (e.key.code == Keyboard::Space)
-				{
-					pause2 = 1;
-					Sleep(10);
-				}
 		}
 		else {
+			app.setFramerateLimit(60);
 			if (Keyboard::isKeyPressed(Keyboard::D) || Keyboard::isKeyPressed(Keyboard::Right)) { x = x + 2.5; flag = 1; }
 			if (Keyboard::isKeyPressed(Keyboard::A) || Keyboard::isKeyPressed(Keyboard::Left)) { x = x - 2.5; flag = -1; }
 			else { x += flag * 2; }
@@ -124,7 +115,7 @@ int main()
 			if (y > 500) {
 				if (score > 0) {
 					time_game = ((float)(int)(clock.getElapsedTime().asSeconds() * 10)) / 10;
-					cout << time_game;
+					cout << "End the game! Replay by open it again";
 					Open_second_window(time_game, score, Bscore);
 					app.close();
 				}
